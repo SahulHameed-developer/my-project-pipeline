@@ -1,0 +1,104 @@
+// All the code is written in between pipline{}
+
+pipeline {
+
+   agent{
+    // This is a mandatory section
+    // name of the server where the pipeline has to be executed
+    // Pipeline can also be executed on the same EC2 server where Jenkins is installed
+   }
+
+   tools{
+    // This is not mandatory
+    // If the Pipeline has to use specific version of any of the tools
+    // Mention the name of the tool that has been configured in the settings-tools section of the Jenkins
+    example: mymaven
+   }
+
+   triggers{
+    // This is not mandatory
+    // At what event or time the pipeline has to be executed
+    // We can setup triggers directly on the pipline job, just like in freestyle
+    // OR you can write code for POLLSCM and periodic trigger
+   }
+
+   parameters{
+    // This is not mandatory
+    // Variables are temp locations that store some data
+    // They allow us to run the pipeline with different sets of data
+    // this data can be passed when executed of the pipeline
+    // Parameterized pipeline
+   }
+
+   environment{
+    // This is not mandatory
+    // Creates environment Variables
+    // stores some data that can be used within this pipeline
+   }
+
+   stages{
+    // This is a mandatory section
+    // This is the main section of the pipeline
+    // Stages block contains multiple stage{} blocks
+    // The code written inside the stages block is executed sequentially stage by stage
+    // They can also be executed in parallel
+
+    // the below is an example of parallel stages
+    stage('Parallel_Stage_Name'){
+      parallel{
+        stage('Stage_1_Name'){
+          steps{
+            // Steps block for stage 1
+          }
+        }
+
+        stage('Stage_2_Name'){
+          steps{
+            // Steps block for stage 2
+          }
+        }
+      }
+    }
+
+    // an example of sequential stages
+    stage('Stage_Name'){
+      // This is a mandatory section
+      // Name of the stage
+      // Each stage block contains multiple steps{} blocks
+      steps{
+        // This is a mandatory section
+        // Contains the actual code that has to be executed
+        // Example: Shell commands, calling other jobs, etc
+        mvn 'pmd:pmd'
+      }
+    }
+
+    stage('Another_Stage_Name'){
+        // Another stage block
+      steps{
+        // Steps block for this stage
+      }
+    }
+
+    stage('Final_Stage_Name'){
+        // Final stage block
+      steps{
+        // Steps block for this stage
+      }
+      post{
+        // This is not mandatory
+        // Commands that has to be executed after the steps{} block of this stage
+        // Actions that has to be performed after the execution of this stage
+        // Example: Clean up activities, sending notifications, etc
+        success{
+          // Commands to be executed only if the stage is successful
+        }
+
+        failure{
+          // Commands to be executed only if the stage fails
+        }
+      }
+    }
+
+   }
+}

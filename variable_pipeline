@@ -1,0 +1,33 @@
+pipeline{
+
+    agent any
+    tools {
+        maven 'mymaven'
+    }
+    parameters{
+        choice(name: 'ENV', choices: ['dev', 'qa'])
+    }
+    stages{
+        stage('Build ON Dev Env'){
+            steps{
+                script{
+                    // define a variable
+                    // variable of type map
+                    // variable storing a key value pair
+                    def mvnCmd = [
+                        dev: 'compile',
+                        qa: 'test',
+                    ]
+
+                    def cmd = mvnCmd[params.ENV]
+
+                    // here is the admin at runtime selects the environment as 'dev'
+                    // then the variable cmd = mvnCmd['dev'] -> 'compile'
+
+                    git branch: 'master', url: 'https://github.com/HouariZegai/Calculator.git'
+                    sh "mvn ${cmd}"
+                }
+            }
+        }
+    }
+}

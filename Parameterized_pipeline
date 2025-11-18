@@ -1,0 +1,41 @@
+pipeline{
+    agent any
+
+    parameters{
+       // a = 100
+       // syntax to declare a variable
+       string(name: 'PERSON', defaultValue: 'Sahul', description: 'Name of the employee')
+       string(name: 'TOOL', defaultValue: 'Jenkins', description: 'Learn the tool')
+
+       // choice - list of options
+       choice(name: 'ENV', choices: ['DEV', 'UAT', 'PROD'], description: 'Select the environment')
+       choice(name: 'Branch', choices: ['main', 'develop', 'feature'], description: 'Select the branch to build')
+       // parameters are used/referred in stages using ${params.VARIABLE_NAME}
+    }
+
+    stages{
+        stage('Display Parameters'){
+            steps{
+                // step to display the parameters
+                echo "Employee Name: ${params.PERSON}" // Employee Name: Sahul
+                echo "Learn the devops Tool: ${params.TOOL}" // Learn the devops Tool: Jenkins
+                echo "Work in the Environment: ${params.ENV}" // Work in the Environment: DEV
+                echo "Work on the Git Branch: ${params.Branch}" // Work on the Git Branch: main
+            }
+        }
+    }
+
+    // Condtions in pipeline
+    // Use case: Based on the environment selected, we want to run specific stages
+    // If ENV = DEV -> Build Stage
+    // If ENV = DEV or UAT -> Test Stage
+    // In pipeline, If condition is implemented using 'when' block
+
+    // when{
+    //     expression { return params.ENV == 'DEV' }
+    // }
+    // steps{
+    //     echo "Building in Development Environment"
+    //     // Add DEV specific build steps here
+    // }
+}

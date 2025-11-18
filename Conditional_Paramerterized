@@ -1,0 +1,35 @@
+pipeline{
+    agent: any
+
+    tools{
+        maven: 'mymaven'
+    }
+
+    parameters{
+        choice(name: 'ENV', choices: ['', 'DEV', 'UAT', 'PROD'], description: 'Select the environment')
+    }
+
+    stages{
+        stage('Build on Dev Environment'){
+            when{
+                expression { return params.ENV == 'DEV' }
+            }
+            steps{
+                git branch: 'master', url: 'https://github.com/HouariZegai/Calculator.git'
+                sh 'mvn clean package'
+            }
+        }
+
+        stage('Test on Test Environment'){
+            when{
+                expression { return params.ENV == 'UAT' }
+            }
+            steps{
+                echo "Running tests in ${params.ENV} environment"
+                git branch: 'master', url: 'https://github.com/HouariZegai/Calculator.git'
+                sh 'mvn pmd:pmd'
+                sh 'mvn test'
+            }
+        }
+    }
+}
