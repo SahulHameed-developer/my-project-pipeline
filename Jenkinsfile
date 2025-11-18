@@ -17,7 +17,7 @@ pipeline{
                 // actual code to be executed
                 // shell commands, calling other jobs, etc
                 // git branch: 'main', url: ''
-                git branch: 'master', url: 'https://github.com/SahulHameed-developer/my-project-pipeline.git'
+                git branch: 'main', url: 'https://github.com/SahulHameed-developer/my-project-pipeline.git'
                 // sh 'mvn clean install'
             }
         }
