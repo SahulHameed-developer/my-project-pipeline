@@ -22,13 +22,29 @@ pipeline{
             }
         }
 
-        stage('Compile the code'){
-            steps{
-                sh 'mvn compile'
-                // sh 'mvn pmd:pmd'
-                // If using windows server, use bat 'mvn compile' instead of sh
+        stage('Parallel Compile and Code Analysis'){
+            parallel{
+                stage('Compile the code'){
+                    steps{
+                        sh 'mvn compile'
+                    }
+                }
+
+                stage('Code Analysis'){
+                    steps{
+                        sh 'mvn pmd:pmd'
+                    }
+                }
             }
         }
+
+        // stage('Compile the code'){
+        //     steps{
+        //         sh 'mvn compile'
+        //         // sh 'mvn pmd:pmd'
+        //         // If using windows server, use bat 'mvn compile' instead of sh
+        //     }
+        // }
 
         // stage('Test the code'){
         //     steps{
@@ -36,11 +52,11 @@ pipeline{
         //     }
         // }
 
-        stage('Code Analysis'){
-            steps{
-                sh 'mvn pmd:pmd'
-            }
-        }
+        // stage('Code Analysis'){
+        //     steps{
+        //         sh 'mvn pmd:pmd'
+        //     }
+        // }
 
         // stage('Build the code'){
         //     steps{
